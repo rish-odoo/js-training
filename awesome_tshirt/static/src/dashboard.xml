@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="awesome_tshirt.clientaction" owl="1">
+        <div class="o_action">
+            <Layout display="display">
+                <t t-set-slot="control-panel-bottom-left">
+                    <button t-on-click="openCustomer" type="button" class="btn btn-primary">CUSTOMERS</button>
+                    <button t-on-click="newOrders" type="button" class="btn btn-primary">NEW ORDERS</button>
+                    <button t-on-click="CancelledOrder" type="button" class="btn btn-primary">CANCELLED ORDERS</button>
+                </t>
+            </Layout>
+        </div>
+    </t>
+</templates>
