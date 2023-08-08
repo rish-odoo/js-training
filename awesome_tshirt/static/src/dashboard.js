@@ -5,9 +5,11 @@ import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
 import { getDefaultConfig } from "@web/views/view";
 import { useService } from "@web/core/utils/hooks";
-import { useRef, useSubEnv } from "@odoo/owl";
+import { useSubEnv } from "@odoo/owl";
 import { Domain } from "@web/core/domain";
+import { Card } from "./card/card";
 
+const { onWillStart } = owl;
 
 class AwesomeDashboard extends Component {
 
@@ -22,6 +24,20 @@ class AwesomeDashboard extends Component {
             controlPanel: { "top-right": false, "bottom-right": false },
         };
         this.action = useService("action");
+
+        this.tshirtService = useService("tshirtService");
+
+        this.keys = {
+            average_quantity: "Average amount of t-shirt by order this month",
+            average_time: "Average time for an order to go from 'new' to 'sent' or 'cancelled'",
+            nb_cancelled_orders: "Number of cancelled orders this month",
+            nb_new_orders: "Number of new orders this month",
+            total_amount: "Total amount of new orders this month",
+        };
+
+        onWillStart(async () => {
+            this.statistics = await this.tshirtService.loadStatistics();
+        });
     }
 
     openCustomer() {
@@ -41,18 +57,18 @@ class AwesomeDashboard extends Component {
     }
 
     newOrders() {
-        const Domain="[('create_date', '>=', (context_today() - datetime.timedelta(days = 7)).strftime('%Y-%m-%d'))]"
-        this.openOrder("orders created in the last 7 days",Domain);
+        const Domain = "[('create_date', '>=', (context_today() - datetime.timedelta(days = 7)).strftime('%Y-%m-%d'))]"
+        this.openOrder("orders created in the last 7 days", Domain);
     }
 
     CancelledOrder() {
-        const Domain="[('create_date', '>=', (context_today() - datetime.timedelta(days = 7)).strftime('%Y-%m-%d')),('state' ,'==','cancelled')]"
-        this.openOrder("orders created in the last 7 days",Domain);
+        const Domain = "[('create_date', '>=', (context_today() - datetime.timedelta(days = 7)).strftime('%Y-%m-%d')),('state' ,'==','cancelled')]"
+        this.openOrder("orders created in the last 7 days", Domain);
 
 
     }
 }
-AwesomeDashboard.components = { Layout };
+AwesomeDashboard.components = { Layout, Card};
 AwesomeDashboard.template = "awesome_tshirt.clientaction";
 
 registry.category("actions").add("awesome_tshirt.dashboard", AwesomeDashboard);

@@ -2,14 +2,29 @@
 <templates xml:space="preserve">
 
     <t t-name="awesome_tshirt.clientaction" owl="1">
-        <div class="o_action">
-            <Layout display="display">
-                <t t-set-slot="control-panel-bottom-left">
-                    <button t-on-click="openCustomer" type="button" class="btn btn-primary">CUSTOMERS</button>
-                    <button t-on-click="newOrders" type="button" class="btn btn-primary">NEW ORDERS</button>
-                    <button t-on-click="CancelledOrder" type="button" class="btn btn-primary">CANCELLED ORDERS</button>
-                </t>
-            </Layout>
+        <Layout display="display">
+            <t t-set-slot="control-panel-bottom-left">
+                <button t-on-click="openCustomer" type="button" class="btn btn-primary">CUSTOMERS</button>
+                <button t-on-click="newOrders" type="button" class="btn btn-primary">NEW ORDERS</button>
+                <button t-on-click="CancelledOrder" type="button" class="btn btn-primary">CANCELLED ORDERS</button>
+            </t>
+        </Layout>
+        <t t-call="awesome_tshirt.clientaction.statistics"/>
+    </t>
+
+    <t t-name="awesome_tshirt.clientaction.statistics" owl="1">
+        <div class="d-flex flex-nowrap">
+            <div t-foreach="keys" t-as="key" t-key="key" class="m-2">
+                <Card>
+                    <t t-set-slot="title">
+                        <t t-esc="keys[key]"/>
+                    </t>
+                    <p class="card-text">
+                        <t t-esc="statistics[key]"/>
+                    </p>
+                </Card>
+            </div>
         </div>
+        
     </t>
 </templates>
